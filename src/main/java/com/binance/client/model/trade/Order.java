@@ -9,7 +9,7 @@ public class Order {
 
     private String clientOrderId;
 
-    private BigDecimal cumQuote;
+    private BigDecimal cumQty;
 
     private BigDecimal executedQty;
 
@@ -47,12 +47,12 @@ public class Order {
         this.clientOrderId = clientOrderId;
     }
 
-    public BigDecimal getCumQuote() {
-        return cumQuote;
+    public BigDecimal getCumQty() {
+        return cumQty;
     }
 
-    public void setCumQuote(BigDecimal cumQuote) {
-        this.cumQuote = cumQuote;
+    public void setCumQty(BigDecimal cumQty) {
+        this.cumQty = cumQty;
     }
 
     public BigDecimal getExecutedQty() {
@@ -170,7 +170,7 @@ public class Order {
     @Override
     public String toString() {
         return new ToStringBuilder(this, BinanceApiConstants.TO_STRING_BUILDER_STYLE)
-                .append("clientOrderId", clientOrderId).append("cumQuote", cumQuote).append("executedQty", executedQty)
+                .append("clientOrderId", clientOrderId).append("cumQty", cumQty).append("executedQty", executedQty)
                 .append("orderId", orderId).append("origQty", origQty).append("price", price)
                 .append("reduceOnly", reduceOnly).append("side", side).append("positionSide", positionSide).append("status", status)
                 .append("stopPrice", stopPrice).append("symbol", symbol).append("timeInForce", timeInForce)

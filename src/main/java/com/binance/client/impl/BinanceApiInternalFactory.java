@@ -1,9 +1,7 @@
 package com.binance.client.impl;
 
-import com.binance.client.RequestOptions;
-import com.binance.client.SubscriptionClient;
-import com.binance.client.SubscriptionOptions;
-import com.binance.client.SyncRequestClient;
+import com.binance.client.*;
+
 import java.net.URI;
 
 public final class BinanceApiInternalFactory {
@@ -21,6 +19,12 @@ public final class BinanceApiInternalFactory {
         RequestOptions requestOptions = new RequestOptions(options);
         RestApiRequestImpl requestImpl = new RestApiRequestImpl(apiKey, secretKey, requestOptions);
         return new SyncRequestImpl(requestImpl);
+    }
+
+    public DeliveryRestClient createDeliveryRestClient(String apiKey, String secretKey, RequestOptions options) {
+        RequestOptions requestOptions = new RequestOptions(options);
+        RestApiRequestImpl requestImpl = new RestApiRequestImpl(apiKey, secretKey, requestOptions);
+        return new DeliveryRestClientImpl(requestImpl);
     }
 
     public SubscriptionClient createSubscriptionClient(String apiKey, String secretKey, SubscriptionOptions options) {

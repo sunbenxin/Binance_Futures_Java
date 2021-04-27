@@ -11,6 +11,16 @@ public class SymbolPrice {
 
     private BigDecimal price;
 
+    private Long time;
+
+    public Long getTime() {
+        return time;
+    }
+
+    public void setTime(Long time) {
+        this.time = time;
+    }
+
     public String getSymbol() {
         return symbol;
     }

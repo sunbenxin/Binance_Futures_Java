@@ -378,10 +378,14 @@ class RestApiRequestImpl {
     }
 
     RestApiRequest<List<MarkPrice>> getMarkPrice(String symbol) {
+        return getCommonMarkPrice(symbol,"/fapi/v1/premiumIndex");
+    }
+
+    private RestApiRequest<List<MarkPrice>> getCommonMarkPrice(String symbol,String addr) {
         RestApiRequest<List<MarkPrice>> request = new RestApiRequest<>();
         UrlParamsBuilder builder = UrlParamsBuilder.build()
                 .putToUrl("symbol", symbol);
-        request.request = createRequestByGet("/fapi/v1/premiumIndex", builder);
+        request.request = createRequestByGet(addr, builder);
 
         request.jsonParser = (jsonWrapper -> {
             List<MarkPrice> result = new LinkedList<>();
@@ -473,10 +477,18 @@ class RestApiRequestImpl {
     }
 
     RestApiRequest<List<SymbolPrice>> getSymbolPriceTicker(String symbol) {
+        return getCommonSymbolPriceTicker(symbol,"/fapi/v1/ticker/price");
+    }
+
+    RestApiRequest<List<SymbolPrice>> getDSymbolPriceTicker(String symbol) {
+        return getCommonSymbolPriceTicker(symbol,"/dapi/v1/ticker/price");
+    }
+
+    private RestApiRequest<List<SymbolPrice>> getCommonSymbolPriceTicker(String symbol,String addr) {
         RestApiRequest<List<SymbolPrice>> request = new RestApiRequest<>();
         UrlParamsBuilder builder = UrlParamsBuilder.build()
                 .putToUrl("symbol", symbol);
-        request.request = createRequestByGet("/fapi/v1/ticker/price", builder);
+        request.request = createRequestByGet(addr, builder);
 
         request.jsonParser = (jsonWrapper -> {
             List<SymbolPrice> result = new LinkedList<>();
@@ -582,7 +594,7 @@ class RestApiRequestImpl {
                     Order o = new Order();
                     JSONObject jsonObj = (JSONObject) obj;
                     o.setClientOrderId(jsonObj.getString("clientOrderId"));
-                    o.setCumQuote(jsonObj.getBigDecimal("cumQuote"));
+                    o.setCumQty(jsonObj.getBigDecimal("cumQuote"));
                     o.setExecutedQty(jsonObj.getBigDecimal("executedQty"));
                     o.setOrderId(jsonObj.getLong("orderId"));
                     o.setOrigQty(jsonObj.getBigDecimal("origQty"));
@@ -605,9 +617,9 @@ class RestApiRequestImpl {
         return request;
     }
 
-    RestApiRequest<Order> postOrder(String symbol, OrderSide side, PositionSide positionSide, OrderType orderType,
-            TimeInForce timeInForce, String quantity, String price, String reduceOnly,
-            String newClientOrderId, String stopPrice, WorkingType workingType, NewOrderRespType newOrderRespType) {
+    private RestApiRequest<Order> postCommonOrder(String symbol, OrderSide side, PositionSide positionSide, OrderType orderType,
+                                    TimeInForce timeInForce, String quantity, String price, String reduceOnly,
+                                    String newClientOrderId, String stopPrice, WorkingType workingType, NewOrderRespType newOrderRespType,String addr) {
         RestApiRequest<Order> request = new RestApiRequest<>();
         UrlParamsBuilder builder = UrlParamsBuilder.build()
                 .putToUrl("symbol", symbol)
@@ -623,12 +635,12 @@ class RestApiRequestImpl {
                 .putToUrl("workingType", workingType)
                 .putToUrl("newOrderRespType", newOrderRespType);
 
-        request.request = createRequestByPostWithSignature("/fapi/v1/order", builder);
+        request.request = createRequestByPostWithSignature(addr, builder);
 
         request.jsonParser = (jsonWrapper -> {
             Order result = new Order();
             result.setClientOrderId(jsonWrapper.getString("clientOrderId"));
-            result.setCumQuote(jsonWrapper.getBigDecimal("cumQuote"));
+            result.setCumQty(jsonWrapper.getBigDecimal("cumQty"));
             result.setExecutedQty(jsonWrapper.getBigDecimal("executedQty"));
             result.setOrderId(jsonWrapper.getLong("orderId"));
             result.setOrigQty(jsonWrapper.getBigDecimal("origQty"));
@@ -646,6 +658,24 @@ class RestApiRequestImpl {
             return result;
         });
         return request;
+    }
+
+    RestApiRequest<Order> postOrder(String symbol, OrderSide side, PositionSide positionSide, OrderType orderType,
+            TimeInForce timeInForce, String quantity, String price, String reduceOnly,
+            String newClientOrderId, String stopPrice, WorkingType workingType, NewOrderRespType newOrderRespType) {
+
+        return postCommonOrder(symbol, side, positionSide, orderType,
+                timeInForce, quantity, price, reduceOnly,
+                newClientOrderId, stopPrice, workingType, newOrderRespType,"/fapi/v1/order");
+    }
+
+    RestApiRequest<Order> postDOrder(String symbol, OrderSide side, PositionSide positionSide, OrderType orderType,
+                                    TimeInForce timeInForce, String quantity, String price, String reduceOnly,
+                                    String newClientOrderId, String stopPrice, WorkingType workingType, NewOrderRespType newOrderRespType) {
+
+        return postCommonOrder(symbol, side, positionSide, orderType,
+                timeInForce, quantity, price, reduceOnly,
+                newClientOrderId, stopPrice, workingType, newOrderRespType,"/dapi/v1/order");
     }
 
     RestApiRequest<ResponseResult> changePositionSide(boolean dual) {
@@ -741,17 +771,25 @@ class RestApiRequestImpl {
     }
 
     RestApiRequest<Order> cancelOrder(String symbol, Long orderId, String origClientOrderId) {
+        return  cancelCommonOrder(symbol, orderId, origClientOrderId,"/fapi/v1/order");
+    }
+
+    RestApiRequest<Order> cancelDOrder(String symbol, Long orderId, String origClientOrderId) {
+        return  cancelCommonOrder(symbol, orderId, origClientOrderId,"/fapi/v1/order");
+    }
+
+    private RestApiRequest<Order> cancelCommonOrder(String symbol, Long orderId, String origClientOrderId,String addr) {
         RestApiRequest<Order> request = new RestApiRequest<>();
         UrlParamsBuilder builder = UrlParamsBuilder.build()
                 .putToUrl("symbol", symbol)
                 .putToUrl("orderId", orderId)
                 .putToUrl("origClientOrderId", origClientOrderId);
-        request.request = createRequestByDeleteWithSignature("/fapi/v1/order", builder);
+        request.request = createRequestByDeleteWithSignature(addr, builder);
 
         request.jsonParser = (jsonWrapper -> {
             Order result = new Order();
             result.setClientOrderId(jsonWrapper.getString("clientOrderId"));
-            result.setCumQuote(jsonWrapper.getBigDecimal("cumQuote"));
+            result.setCumQty(jsonWrapper.getBigDecimal("cumQuote"));
             result.setExecutedQty(jsonWrapper.getBigDecimal("executedQty"));
             result.setOrderId(jsonWrapper.getLong("orderId"));
             result.setOrigQty(jsonWrapper.getBigDecimal("origQty"));
@@ -813,7 +851,7 @@ class RestApiRequestImpl {
                     Order o = new Order();
                     JSONObject jsonObj = (JSONObject) obj;
                     o.setClientOrderId(jsonObj.getString("clientOrderId"));
-                    o.setCumQuote(jsonObj.getBigDecimal("cumQuote"));
+                    o.setCumQty(jsonObj.getBigDecimal("cumQuote"));
                     o.setExecutedQty(jsonObj.getBigDecimal("executedQty"));
                     o.setOrderId(jsonObj.getLong("orderId"));
                     o.setOrigQty(jsonObj.getBigDecimal("origQty"));
@@ -837,17 +875,25 @@ class RestApiRequestImpl {
     }
 
     RestApiRequest<Order> getOrder(String symbol, Long orderId, String origClientOrderId) {
+        return  getCommonOrder(symbol, orderId, origClientOrderId,"/fapi/v1/order");
+    }
+
+    RestApiRequest<Order> getDOrder(String symbol, Long orderId, String origClientOrderId) {
+        return  getCommonOrder(symbol, orderId, origClientOrderId,"/dapi/v1/order");
+    }
+
+    private RestApiRequest<Order> getCommonOrder(String symbol, Long orderId, String origClientOrderId,String addr) {
         RestApiRequest<Order> request = new RestApiRequest<>();
         UrlParamsBuilder builder = UrlParamsBuilder.build()
                 .putToUrl("symbol", symbol)
                 .putToUrl("orderId", orderId)
                 .putToUrl("origClientOrderId", origClientOrderId);
-        request.request = createRequestByGetWithSignature("/fapi/v1/order", builder);
+        request.request = createRequestByGetWithSignature(addr, builder);
 
         request.jsonParser = (jsonWrapper -> {
             Order result = new Order();
             result.setClientOrderId(jsonWrapper.getString("clientOrderId"));
-            result.setCumQuote(jsonWrapper.getBigDecimal("cumQuote"));
+            result.setCumQty(jsonWrapper.getBigDecimal("cumQuote"));
             result.setExecutedQty(jsonWrapper.getBigDecimal("executedQty"));
             result.setOrderId(jsonWrapper.getLong("orderId"));
             result.setOrigQty(jsonWrapper.getBigDecimal("origQty"));
@@ -879,7 +925,7 @@ class RestApiRequestImpl {
             dataArray.forEach((item) -> {
                 Order element = new Order();
                 element.setClientOrderId(item.getString("clientOrderId"));
-                element.setCumQuote(item.getBigDecimal("cumQuote"));
+                element.setCumQty(item.getBigDecimal("cumQuote"));
                 element.setExecutedQty(item.getBigDecimal("executedQty"));
                 element.setOrderId(item.getLong("orderId"));
                 element.setOrigQty(item.getBigDecimal("origQty"));
@@ -917,7 +963,7 @@ class RestApiRequestImpl {
             dataArray.forEach((item) -> {
                 Order element = new Order();
                 element.setClientOrderId(item.getString("clientOrderId"));
-                element.setCumQuote(item.getBigDecimal("cumQuote"));
+                element.setCumQty(item.getBigDecimal("cumQuote"));
                 element.setExecutedQty(item.getBigDecimal("executedQty"));
                 element.setOrderId(item.getLong("orderId"));
                 element.setOrigQty(item.getBigDecimal("origQty"));
@@ -1332,4 +1378,7 @@ class RestApiRequestImpl {
         return request;
     }
 
+    RestApiRequest<List<MarkPrice>> getDMarkPrice(String symbol) {
+        return getCommonMarkPrice(symbol,"/dapi/v1/premiumIndex");
+    }
 }

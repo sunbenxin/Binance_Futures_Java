@@ -2,6 +2,7 @@ package com.binance.client;
 
 import com.alibaba.fastjson.JSONObject;
 import com.binance.client.impl.BinanceApiInternalFactory;
+import com.binance.client.impl.RestApiRequest;
 import com.binance.client.model.ResponseResult;
 import com.binance.client.model.enums.*;
 import com.binance.client.model.market.*;
@@ -91,4 +92,11 @@ public interface DeliveryRestClient {
      * @return Order status.
      */
     Order getOrder(String symbol, Long orderId, String origClientOrderId);
+
+    /**
+     * Get position.
+     *
+     * @return Position.
+     */
+    List<PositionRisk> getPositionRisk();
 }

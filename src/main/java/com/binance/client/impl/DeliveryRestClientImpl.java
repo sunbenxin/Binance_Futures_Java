@@ -43,4 +43,9 @@ public class DeliveryRestClientImpl implements DeliveryRestClient {
     public List<SymbolPrice> getSymbolPriceTicker(String symbol) {
         return RestApiInvoker.callSync(requestImpl.getDSymbolPriceTicker(symbol));
     }
+
+    @Override
+    public List<PositionRisk> getPositionRisk(){
+        return RestApiInvoker.callSync(requestImpl.getDPositionRisk());
+    }
 }

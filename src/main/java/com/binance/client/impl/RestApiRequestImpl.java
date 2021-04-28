@@ -1086,10 +1086,18 @@ class RestApiRequestImpl {
         return request;
     }
 
+    RestApiRequest<List<PositionRisk>> getDPositionRisk() {
+        return getCommonPositionRisk("/dapi/v1/positionRisk");
+    }
+
     RestApiRequest<List<PositionRisk>> getPositionRisk() {
+        return getCommonPositionRisk("/fapi/v1/positionRisk");
+    }
+
+    RestApiRequest<List<PositionRisk>> getCommonPositionRisk(String addr) {
         RestApiRequest<List<PositionRisk>> request = new RestApiRequest<>();
         UrlParamsBuilder builder = UrlParamsBuilder.build();
-        request.request = createRequestByGetWithSignature("/fapi/v1/positionRisk", builder);
+        request.request = createRequestByGetWithSignature(addr, builder);
 
         request.jsonParser = (jsonWrapper -> {
             List<PositionRisk> result = new LinkedList<>();

@@ -1106,11 +1106,6 @@ class RestApiRequestImpl {
                 PositionRisk element = new PositionRisk();
                 element.setEntryPrice(item.getBigDecimal("entryPrice"));
                 element.setLeverage(item.getBigDecimal("leverage"));
-                if(item.getString("maxNotionalValue").equals("INF")) {
-                    element.setMaxNotionalValue(Double.POSITIVE_INFINITY);
-                } else {
-                    element.setMaxNotionalValue(item.getDouble("maxNotionalValue"));
-                }
                 element.setLiquidationPrice(item.getBigDecimal("liquidationPrice"));
                 element.setMarkPrice(item.getBigDecimal("markPrice"));
                 element.setPositionAmt(item.getBigDecimal("positionAmt"));

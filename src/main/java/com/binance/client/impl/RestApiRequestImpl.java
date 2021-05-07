@@ -775,7 +775,7 @@ class RestApiRequestImpl {
     }
 
     RestApiRequest<Order> cancelDOrder(String symbol, Long orderId, String origClientOrderId) {
-        return  cancelCommonOrder(symbol, orderId, origClientOrderId,"/fapi/v1/order");
+        return  cancelCommonOrder(symbol, orderId, origClientOrderId,"/dapi/v1/order");
     }
 
     private RestApiRequest<Order> cancelCommonOrder(String symbol, Long orderId, String origClientOrderId,String addr) {

@@ -1,6 +1,7 @@
 package com.binance.client.impl;
 
 import com.binance.client.DeliveryRestClient;
+import com.binance.client.model.ResponseResult;
 import com.binance.client.model.enums.*;
 import com.binance.client.model.market.*;
 import com.binance.client.model.trade.*;
@@ -47,5 +48,25 @@ public class DeliveryRestClientImpl implements DeliveryRestClient {
     @Override
     public List<PositionRisk> getPositionRisk(){
         return RestApiInvoker.callSync(requestImpl.getDPositionRisk());
+    }
+
+    @Override
+    public String startUserDataStream() {
+        return RestApiInvoker.callSync(requestImpl.startDUserDataStream());
+    }
+
+    @Override
+    public String keepUserDataStream(String listenKey) {
+        return RestApiInvoker.callSync(requestImpl.keepDUserDataStream(listenKey));
+    }
+
+    @Override
+    public String closeUserDataStream(String listenKey) {
+        return RestApiInvoker.callSync(requestImpl.closeDUserDataStream(listenKey));
+    }
+
+    @Override
+    public ResponseResult changeMarginType(String symbolName, String marginType) {
+        return RestApiInvoker.callSync(requestImpl.changeDMarginType(symbolName, marginType));
     }
 }

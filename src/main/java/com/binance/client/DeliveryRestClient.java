@@ -99,4 +99,39 @@ public interface DeliveryRestClient {
      * @return Position.
      */
     List<PositionRisk> getPositionRisk();
+
+    /**
+     * Start user data stream.
+     *
+     * @return listenKey.
+     */
+    String startUserDataStream();
+
+    /**
+     * Keep user data stream.
+     *
+     * @return null.
+     */
+    String keepUserDataStream(String listenKey);
+
+    /**
+     * Close user data stream.
+     *
+     * @return null.
+     */
+    String closeUserDataStream(String listenKey);
+
+    /**
+     * Open Interest Stat (MARKET DATA)
+     *
+     * @return Open Interest Stat.
+     */
+
+    /**
+     * Change margin type (ISOLATED, CROSSED)
+     * @param symbolName
+     * @param marginType
+     * @return
+     */
+    ResponseResult changeMarginType(String symbolName, String marginType);
 }

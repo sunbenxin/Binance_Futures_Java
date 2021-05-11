@@ -694,11 +694,19 @@ class RestApiRequestImpl {
     }
 
     RestApiRequest<ResponseResult> changeMarginType(String symbolName, String marginType) {
+        return changeCommonMarginType(symbolName,marginType,"/fapi/v1/marginType");
+    }
+
+    RestApiRequest<ResponseResult> changeDMarginType(String symbolName, String marginType) {
+        return changeCommonMarginType(symbolName,marginType,"/dapi/v1/marginType");
+    }
+
+    RestApiRequest<ResponseResult> changeCommonMarginType(String symbolName, String marginType,String addr) {
         RestApiRequest<ResponseResult> request = new RestApiRequest<>();
         UrlParamsBuilder builder = UrlParamsBuilder.build()
                 .putToUrl("symbol", symbolName)
                 .putToUrl("marginType", marginType);
-        request.request = createRequestByPostWithSignature("/fapi/v1/marginType", builder);
+        request.request = createRequestByPostWithSignature(addr, builder);
 
         request.jsonParser = (jsonWrapper -> {
             ResponseResult result = new ResponseResult();
@@ -1186,11 +1194,19 @@ class RestApiRequestImpl {
         return request;
     }
 
+    RestApiRequest<String> startDUserDataStream() {
+        return startCommonUserDataStream("/dapi/v1/listenKey");
+    }
+
     RestApiRequest<String> startUserDataStream() {
+        return startCommonUserDataStream("/fapi/v1/listenKey");
+    }
+
+    RestApiRequest<String> startCommonUserDataStream(String addr) {
         RestApiRequest<String> request = new RestApiRequest<>();
         UrlParamsBuilder builder = UrlParamsBuilder.build();
 
-        request.request = createRequestByPostWithSignature("/fapi/v1/listenKey", builder);
+        request.request = createRequestByPostWithSignature(addr, builder);
 
         request.jsonParser = (jsonWrapper -> {
             String result = jsonWrapper.getString("listenKey");
@@ -1199,12 +1215,20 @@ class RestApiRequestImpl {
         return request;
     }
 
+    RestApiRequest<String> keepDUserDataStream(String listenKey) {
+        return keepCommonUserDataStream(listenKey,"/dapi/v1/listenKey");
+    }
+
     RestApiRequest<String> keepUserDataStream(String listenKey) {
+        return keepCommonUserDataStream(listenKey,"/fapi/v1/listenKey");
+    }
+
+    RestApiRequest<String> keepCommonUserDataStream(String listenKey,String addr) {
         RestApiRequest<String> request = new RestApiRequest<>();
         UrlParamsBuilder builder = UrlParamsBuilder.build()
                 .putToUrl("listenKey", listenKey);
 
-        request.request = createRequestByPutWithSignature("/fapi/v1/listenKey", builder);
+        request.request = createRequestByPutWithSignature(addr, builder);
 
         request.jsonParser = (jsonWrapper -> {
             String result = "Ok";
@@ -1214,11 +1238,19 @@ class RestApiRequestImpl {
     }
 
     RestApiRequest<String> closeUserDataStream(String listenKey) {
+        return closeCommonUserDataStream(listenKey,"/fapi/v1/listenKey");
+    }
+
+    RestApiRequest<String> closeDUserDataStream(String listenKey) {
+        return closeCommonUserDataStream(listenKey,"/dapi/v1/listenKey");
+    }
+
+    RestApiRequest<String> closeCommonUserDataStream(String listenKey,String addr) {
         RestApiRequest<String> request = new RestApiRequest<>();
         UrlParamsBuilder builder = UrlParamsBuilder.build()
                 .putToUrl("listenKey", listenKey);
 
-        request.request = createRequestByDeleteWithSignature("/fapi/v1/listenKey", builder);
+        request.request = createRequestByDeleteWithSignature(addr, builder);
 
         request.jsonParser = (jsonWrapper -> {
             String result = "Ok";

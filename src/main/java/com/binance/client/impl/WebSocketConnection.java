@@ -48,8 +48,8 @@ public class WebSocketConnection extends WebSocketListener {
         this.request = request;
         this.autoClose = autoClose;
 
-        this.okhttpRequest = request.authHandler == null ? new Request.Builder().url(subscriptionUrl).build()
-                : new Request.Builder().url(subscriptionUrl).build();
+        this.okhttpRequest = request.authHandler == null ? new Request.Builder().url(options.getUri()).build()
+                : new Request.Builder().url(options.getUri()).build();
         this.watchDog = watchDog;
         log.info("[Sub] Connection [id: " + this.connectionId + "] created for " + request.name);
     }

@@ -148,4 +148,11 @@ public interface DeliveryRestClient {
      * @return Current account information.
      */
     AccountInformation getAccountInformation();
+
+    /**
+     * Fetch current exchange trading rules and symbol information.
+     *
+     * @return Current exchange trading rules and symbol information.
+     */
+    ExchangeInformation getExchangeInformation();
 }

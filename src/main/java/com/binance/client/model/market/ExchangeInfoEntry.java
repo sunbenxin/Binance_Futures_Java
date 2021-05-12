@@ -30,6 +30,8 @@ public class ExchangeInfoEntry {
 
     private Long quotePrecision;
 
+    private Long contractSize;
+
     private List<String> orderTypes;
 
     private List<String> timeInForce;
@@ -115,6 +117,15 @@ public class ExchangeInfoEntry {
     public void setQuotePrecision(Long quotePrecision) {
         this.quotePrecision = quotePrecision;
     }
+
+    public Long getContractSize() {
+        return contractSize;
+    }
+
+    public void setContractSize(Long contractSize) {
+        this.contractSize = contractSize;
+    }
+
 
     public List<String> getOrderTypes() {
         return orderTypes;

@@ -158,9 +158,17 @@ class RestApiRequestImpl {
     }
 
     RestApiRequest<ExchangeInformation> getExchangeInformation() {
+        return getCommonExchangeInformation("/fapi/v1/exchangeInfo");
+    }
+
+    RestApiRequest<ExchangeInformation> getDExchangeInformation() {
+        return getCommonExchangeInformation("/dapi/v1/exchangeInfo");
+    }
+
+    RestApiRequest<ExchangeInformation> getCommonExchangeInformation(String addr) {
         RestApiRequest<ExchangeInformation> request = new RestApiRequest<>();
         UrlParamsBuilder builder = UrlParamsBuilder.build();
-        request.request = createRequestByGet("/fapi/v1/exchangeInfo", builder);
+        request.request = createRequestByGet(addr, builder);
 
         request.jsonParser = (jsonWrapper -> {
             ExchangeInformation result = new ExchangeInformation();
@@ -194,8 +202,8 @@ class RestApiRequestImpl {
             JsonWrapperArray symbolArray = jsonWrapper.getJsonArray("symbols");
             symbolArray.forEach((item) -> {
                 ExchangeInfoEntry symbol = new ExchangeInfoEntry();
+                symbol.setContractSize(item.getLong("contractSize"));
                 symbol.setSymbol(item.getString("symbol"));
-                symbol.setStatus(item.getString("status"));
                 symbol.setMaintMarginPercent(item.getBigDecimal("maintMarginPercent"));
                 symbol.setRequiredMarginPercent(item.getBigDecimal("requiredMarginPercent"));
                 symbol.setBaseAsset(item.getString("baseAsset"));

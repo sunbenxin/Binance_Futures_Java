@@ -79,4 +79,9 @@ public class DeliveryRestClientImpl implements DeliveryRestClient {
     public AccountInformation getAccountInformation() {
         return RestApiInvoker.callSync(requestImpl.getDAccountInformation());
     }
+
+    @Override
+    public ExchangeInformation getExchangeInformation() {
+        return RestApiInvoker.callSync(requestImpl.getDExchangeInformation());
+    }
 }

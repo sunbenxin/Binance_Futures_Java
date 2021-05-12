@@ -69,4 +69,14 @@ public class DeliveryRestClientImpl implements DeliveryRestClient {
     public ResponseResult changeMarginType(String symbolName, String marginType) {
         return RestApiInvoker.callSync(requestImpl.changeDMarginType(symbolName, marginType));
     }
+
+    @Override
+    public List<AccountBalance> getBalance() {
+        return RestApiInvoker.callSync(requestImpl.getDBalance());
+    }
+
+    @Override
+    public AccountInformation getAccountInformation() {
+        return RestApiInvoker.callSync(requestImpl.getDAccountInformation());
+    }
 }

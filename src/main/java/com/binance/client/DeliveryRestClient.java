@@ -134,4 +134,18 @@ public interface DeliveryRestClient {
      * @return
      */
     ResponseResult changeMarginType(String symbolName, String marginType);
+
+    /**
+     * Get account balances.
+     *
+     * @return Balances.
+     */
+    List<AccountBalance> getBalance();
+
+    /**
+     * Get current account information.
+     *
+     * @return Current account information.
+     */
+    AccountInformation getAccountInformation();
 }
